@@ -10,7 +10,7 @@ process_num = 5 # 프로세스의 갯수, 나중에 input으로 변경
 
 burst_time = np.random.poisson(5, process_num) # Burst Time
 count, bins, ignored = plt.hist(burst_time, 14, density=True)
-plt.show()
+plt.savefig("input_diagram.png")
 
 arrive_time = np.random.poisson(5, process_num) # Burst Time
 
