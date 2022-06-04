@@ -1,0 +1,21 @@
+import random
+import numpy as np
+import matplotlib.pyplot as plt
+
+f = open("process.txt", 'w')
+
+print("Init Input Process")
+
+process_num = 5 # 프로세스의 갯수, 나중에 input으로 변경
+
+burst_time = np.random.poisson(5, process_num) # Burst Time
+count, bins, ignored = plt.hist(burst_time, 14, density=True)
+plt.show()
+
+arrive_time = np.random.poisson(5, process_num) # Burst Time
+
+for i in range(process_num):
+    inp = str(arrive_time[i]) + " " + str(burst_time[i])
+    if i is not process_num-1:
+        inp += "\n"
+    f.write(inp)
