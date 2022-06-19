@@ -6,7 +6,7 @@ f = open("process.txt", 'w')
 
 print("Init Input Process")
 
-process_num = 5 # 프로세스의 갯수, 나중에 input으로 변경
+process_num = input("Input number of Process : ") # 프로세스의 갯수, 나중에 input으로 변경
 
 burst_time = np.random.poisson(5, process_num) # Burst Time
 count, bins, ignored = plt.hist(burst_time, 14, density=True)
