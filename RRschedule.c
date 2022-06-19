@@ -68,6 +68,10 @@ void SJFscheduler(struct Process *p, int num_process) {
     clear_process(p,num_process);
     int readynum = 0; //ready배열에 있는 프로세스 수
     int processlist[101] = {0,};
+
+    FILE *fd = fopen("pytxt.txt", "w");
+    fprintf(fd,"%d\n",num_process);
+
     while(num_process > 0){
         for(int i=0;i<origin_numprocess;i++){ // 들어온 process를 ready 배열에 넣어준다.
             if(p[i].arrivetime == currenttime){
@@ -92,6 +96,7 @@ void SJFscheduler(struct Process *p, int num_process) {
             }
             excute[currenttime] = ready[0].p_id;
             ready[0].remaintime--;
+            fprintf(fd,"%d %d %d\n",ready[0].p_id, currenttime, 1);
             if(ready[0].remaintime == 0){
                 p[ready[0].p_id - 1].turnaroundtime = currenttime;
                 for(int i=0; i<readynum-1; i++) {
@@ -108,6 +113,7 @@ void SJFscheduler(struct Process *p, int num_process) {
         currenttime++;
     }
 
+    fclose(fd);
     int idle_time=0;
     for(int i=0;i<currenttime;i++){
         if(excute[i] == 0 )idle_time++;
@@ -202,6 +208,7 @@ void RRscheduler(struct Process *p, int num_process) {
             process_excutetime++;
             if(ready[0].remaintime == 0){ //ready배열에 첫번째 프로세스의 남은시간이 없을때
                 p[ready[0].p_id - 1].turnaroundtime = currenttime;
+                fprintf(fd,"%d %d %d\n",ready[0].p_id, currenttime-process_excutetime+1 , process_excutetime);
                 if(readynum > 1){ //ready배열에 대기중인 프로세스가 있을때
                     for(int i=0;i<readynum-1;i++){
                     memcpy(&ready[i],&ready[i+1],sizeof(struct Process)); // ready배열 한칸씩 앞으로 당기기
@@ -217,6 +224,7 @@ void RRscheduler(struct Process *p, int num_process) {
             }
 
             if(timequantum == process_excutetime){ // 실행중인 프로세스가 타임슬라이스만큼 실행했을때
+                fprintf(fd,"%d %d %d\n",ready[0].p_id, currenttime-process_excutetime+1 , process_excutetime);
                 if(readynum > 1){ //ready배열에 대기 중인 프로세스가 있을때
                     struct Process temp = ready[0];
                     for(int i=0;i<readynum-1;i++){
@@ -240,6 +248,8 @@ void RRscheduler(struct Process *p, int num_process) {
     }
 
     float utilization = (1- ((float)idle_time/(currenttime-1))) * 100;
+    fprintf(fd,"%d",currenttime);
+    fclose(fd);
 
     printf("\n");
     float aver_response = 0, aver_turnaround = 0, aver_waiting = 0;
