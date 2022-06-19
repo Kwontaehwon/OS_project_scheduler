@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio_ext.h>
 
 struct Process {
     int p_id;
@@ -307,7 +308,7 @@ int main(){
     printf("+-------+--------+----------+\n\n");
 
     while(!ok){
-        printf("input : ");
+        printf("Select Scheduler (Input 1 or 2) : ");
         scanf("%d",&input);
         if(input == 1) {
             RRscheduler(p, num_process);
@@ -316,7 +317,8 @@ int main(){
             SJFscheduler(p, num_process);
             ok = 1;
         } else {
-            printf("input is 1 or 2\n");
+            printf("Please Input 1 or 2\n");
+	    __fpurge(stdin); 
         }
     }
     return 0;
