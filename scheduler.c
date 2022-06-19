@@ -22,7 +22,7 @@ int input_data(struct Process p[]){
     int arrivetime, bursttime;
 
     while (!feof(fd)) {
-        fgets(data, sizeof(data), fd);
+       if( fgets(data, sizeof(data), fd) == NULL) break;
         pdata = strtok(data, " ");
         for(int j = 0; j < 2; j++){
             if(j == 0){
