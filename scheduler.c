@@ -99,7 +99,8 @@ void SJFscheduler(struct Process *p, int num_process) {
             ready[0].remaintime--;
             fprintf(fd,"%d %d %d\n",ready[0].p_id, currenttime, 1);
             if(ready[0].remaintime == 0){
-                p[ready[0].p_id - 1].turnaroundtime = currenttime;
+                p[ready[0].p_id - 1].turnaroundtime = currenttime - p[ready[0].p_id - 1].arrivetime + 1;
+                p[ready[0].p_id - 1].responsetime = currenttime - p[ready[0].p_id - 1].responsetime + 1;
                 for(int i=0; i<readynum-1; i++) {
                     memcpy(&ready[i],&ready[i+1],sizeof(struct Process));
                 }
@@ -208,7 +209,8 @@ void RRscheduler(struct Process *p, int num_process) {
             ready[0].remaintime--;
             process_excutetime++;
             if(ready[0].remaintime == 0){ //ready배열에 첫번째 프로세스의 남은시간이 없을때
-                p[ready[0].p_id - 1].turnaroundtime = currenttime;
+                p[ready[0].p_id - 1].turnaroundtime = currenttime - p[ready[0].p_id - 1].arrivetime + 1;
+                p[ready[0].p_id - 1].responsetime = currenttime - p[ready[0].p_id - 1].responsetime + 1;
                 fprintf(fd,"%d %d %d\n",ready[0].p_id, currenttime-process_excutetime+1 , process_excutetime);
                 if(readynum > 1){ //ready배열에 대기중인 프로세스가 있을때
                     for(int i=0;i<readynum-1;i++){
@@ -318,7 +320,7 @@ int main(){
             ok = 1;
         } else {
             printf("Please Input 1 or 2\n");
-	    __fpurge(stdin); 
+	        __fpurge(stdin); 
         }
     }
     return 0;
