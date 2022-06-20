@@ -227,6 +227,10 @@ void RRscheduler(struct Process *p, int num_process) {
                 readynum--;
                 num_process--;
                 process_excutetime = 0;
+		if(processlist[ready[0].p_id] == 0){
+			processlist[ready[0].p_id] = 1;
+			p[ready[0].p_id - 1].responsetime = currenttime - ready[0].arrivetime + 1;
+		}
             }
 
             if(timequantum == process_excutetime){ // 실행중인 프로세스가 타임슬라이스만큼 실행했을때
