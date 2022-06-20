@@ -116,15 +116,14 @@ void SJFscheduler(struct Process *p, int num_process) {
 
         currenttime++;
     }
-
+    fprintf(fd, "%d", currenttime);
     fclose(fd);
     int idle_time=0;
     for(int i=0;i<currenttime;i++){
         if(excute[i] == 0 )idle_time++;
     }
 
-    float utilization = (1- ((float)idle_time/(currenttime-1))) * 100;
-
+    float utilization = (1- ((float)idle_time/(currenttime))) * 100;
     printf("\n");
     float aver_response = 0, aver_turnaround = 0, aver_waiting = 0;
     printf("\
@@ -149,7 +148,7 @@ void SJFscheduler(struct Process *p, int num_process) {
     aver_waiting /= origin_numprocess;
 
     printf("Total %d Processes\n", origin_numprocess);
-    printf("Total Runtime           : %d\n", currenttime-1);
+    printf("Total Runtime           : %d\n", currenttime);
     printf("Utilization             : %.3lf%%\n", utilization);
     printf("Idle Time               : %d\n", idle_time);
     printf("Average Waiting Time    : %.3f\n", aver_waiting);
@@ -198,7 +197,7 @@ void RRscheduler(struct Process *p, int num_process) {
                 now_excute = 1; //프로세스 실행중으로 바꾸기
                 if(processlist[ready[0].p_id] == 0){
                     processlist[ready[0].p_id] = 1;
-                    p[ready[0].p_id - 1].responsetime = currenttime;
+                    p[ready[0].p_id - 1].responsetime = currenttime - ready[0].arrivetime;
                 }
             } else {
                 excute[currenttime] = 0;
@@ -242,7 +241,7 @@ void RRscheduler(struct Process *p, int num_process) {
                 process_excutetime = 0;
                 if(processlist[ready[0].p_id] == 0){
                     processlist[ready[0].p_id] = 1;
-                    p[ready[0].p_id - 1].responsetime = currenttime+1;
+                    p[ready[0].p_id - 1].responsetime = currenttime - ready[0].arrivetime + 1;
                 }
             }
         }
@@ -254,7 +253,7 @@ void RRscheduler(struct Process *p, int num_process) {
         if(excute[i] == 0 )idle_time++;
     }
 
-    float utilization = (1- ((float)idle_time/(currenttime-1))) * 100;
+    float utilization = (1- ((float)idle_time/(currenttime))) * 100;
     fprintf(fd,"%d",currenttime);
     fclose(fd);
 
@@ -282,7 +281,7 @@ void RRscheduler(struct Process *p, int num_process) {
     aver_waiting /= origin_numprocess;
 
     printf("Total %d Processes\n", origin_numprocess);
-    printf("Total Runtime           : %d\n", currenttime-1);
+    printf("Total Runtime           : %d\n", currenttime);
     printf("Utilization             : %.3lf%%\n", utilization);
     printf("Idle Time               : %d\n", idle_time);
     printf("Average Waiting Time    : %.3f\n", aver_waiting);
