@@ -205,6 +205,7 @@ void RRscheduler(struct Process *p, int num_process) {
         }
 
         if(now_excute == 1){ //실행중인 프로세스 있을때
+	    if(ready[0].bursttime == ready[0].remaintime && p[ready[0].p_id - 1].responsetime == 0) p[ready[0].p_id-1].responsetime = currenttime;
             excute[currenttime] = ready[0].p_id; 
             ready[0].remaintime--;
             process_excutetime++;
